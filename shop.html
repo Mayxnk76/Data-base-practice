@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEasy • Online Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+    body { background: #f5f5f5; }
+    header { background: #ff6f61; color: #fff; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+    header h1 { font-size: 24px; }
+    nav a { color: #fff; margin-left: 20px; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    .hero { background: url('https://source.unsplash.com/1200x400/?shopping') center/cover no-repeat; height: 400px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px; font-weight: bold; text-shadow: 2px 2px #000; }
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 40px; }
+    .product-card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s; }
+    .product-card:hover { transform: translateY(-5px); }
+    .product-card img { width: 100%; border-radius: 10px; }
+    .product-card h3 { margin: 15px 0 10px; }
+    .product-card p { font-weight: bold; color: #ff1500; margin-bottom: 15px; }
+    .product-card button { background: #ff6f61; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: background 0.3s; }
+    .product-card button:hover { background: #ff3b2e; }
+    .cart { position: fixed; top: 20px; right: 20px; background: #fff; padding: 15px 20px; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 1001; }
+    .cart span { font-weight: bold; margin-left: 10px; }
+    .cart-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1002; }
+    .cart-content { background: #fff; width: 90%; max-width: 500px; padding: 20px; border-radius: 10px; max-height: 80%; overflow-y: auto; }
+    .cart-content h2 { margin-bottom: 20px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .cart-item button { background: #ff6f61; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    footer { background: #333; color: #fff; text-align: center; padding: 20px; margin-top: 40px; }
+    @media(max-width:600px){ .hero { font-size: 24px; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>ShopEasy</h1>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Shop</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<div class="hero">Welcome to ShopEasy!</div>
+
+<div class="products">
+  <div class="product-card" data-name="Red T-Shirt" data-price="499">
+    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Forangeidea.in%2Fproducts%2Foi-red-plain-t-shirt-1%3Fsrsltid%3DAfmBOorpvIb3Gxdr5INbMbgdz7TDh7MiQJl87RNNRydV4gxLRiBynBho&psig=AOvVaw3Ifxp-eR1G913EfwsEJ6cB&ust=1756801521396000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCLi_quuRt48DFQAAAAAdAAAAABAE" alt="Red T-Shirt">
+    <h3>Red T-Shirt</h3>
+    <p>₹499</p>
+    <button>Add to Cart</button>
+  </div>
+  <div class="product-card" data-name="Blue Jeans" data-price="999">
+    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.nextdirect.com%2Fin%2Fen%2Fstyle%2Fst299132%2F218472&psig=AOvVaw2nUqL-yZQzhaVS-uerxkRj&ust=1756801900714000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCPi26qCTt48DFQAAAAAdAAAAABAE" alt="Blue Jeans">
+    <h3>Blue Jeans</h3>
+    <p>₹999</p>
+    <button>Add to Cart</button>
+  </div>
+  <div class="product-card" data-name="Sneakers" data-price="1499">
+    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.amazon.in%2FSneakers-Men%2Fb%3Fie%3DUTF8%26node%3D1983577031&psig=AOvVaw3LBrBYdDNp05AeRvybzeOI&ust=1756802208737000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOCvvK6Ut48DFQAAAAAdAAAAABAE" alt="Sneakers">
+    <h3>Sneakers</h3>
+    <p>₹1499</p>
+    <button>Add to Cart</button>
+  </div>
+  <div class="product-card" data-name="Watch" data-price="1999">
+    <img src=" " alt="Watch">
+    <h3>Watch</h3>
+    <p>₹1999</p>
+    <button>Add to Cart</button>
+  </div>
+  <div class="product-card" data-name="Sunglasses" data-price="599">
+    <img src="https://source.unsplash.com/200x200/?sunglasses" alt="Sunglasses">
+    <h3>Sunglasses</h3>
+    <p>₹599</p>
+    <button>Add to Cart</button>
+  </div>
+  <div class="product-card" data-name="Backpack" data-price="899">
+    <img src="https://source.unsplash.com/200x200/?backpack" alt="Backpack">
+    <h3>Backpack</h3>
+    <p>₹899</p>
+    <button>Add to Cart</button>
+  </div>
+  <div class="product-card" data-name="Headphones" data-price="1299">
+    <img src="https://source.unsplash.com/200x200/?headphones" alt="Headphones">
+    <h3>Headphones</h3>
+    <p>₹1299</p>
+    <button>Add to Cart</button>
+  </div>
+  <div class="product-card" data-name="Cap" data-price="299">
+    <img src="https://source.unsplash.com/200x200/?cap" alt="Cap">
+    <h3>Cap</h3>
+    <p>₹299</p>
+    <button>Add to Cart</button>
+  </div>
+</div>
+
+<div class="cart">
+  🛒 Cart <span id="cart-count">0</span>
+</div>
+
+<div class="cart-modal" id="cart-modal">
+  <div class="cart-content">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <p><strong>Total: ₹<span id="cart-total">0</span></strong></p>
+    <button onclick="closeCart()">Close</button>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 ShopEasy. All rights reserved.
+</footer>
+
+<script>
+  const cartBtn = document.querySelector('.cart');
+  const cartModal = document.getElementById('cart-modal');
+  const cartItemsContainer = document.getElementById('cart-items');
+  const cartCount = document.getElementById('cart-count');
+  const cartTotal = document.getElementById('cart-total');
+
+  let cart = [];
+
+  document.querySelectorAll('.product-card button').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const card = e.target.parentElement;
+      const name = card.dataset.name;
+      const price = parseInt(card.dataset.price);
+      const existing = cart.find(item => item.name === name);
+      if(existing){
+        existing.qty += 1;
+      } else {
+        cart.push({name, price, qty: 1});
+      }
+      updateCart();
+    });
+  });
+
+  function updateCart(){
+    cartCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+    cartTotal.textContent = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    cartItemsContainer.innerHTML = '';
+    cart.forEach(item => {
+      const div = document.createElement('div');
+      div.classList.add('cart-item');
+      div.innerHTML = `${item.name} x ${item.qty} - ₹${item.price * item.qty} <button onclick="removeItem('${item.name}')">Remove</button>`;
+      cartItemsContainer.appendChild(div);
+    });
+  }
+
+  function removeItem(name){
+    cart = cart.filter(item => item.name !== name);
+    updateCart();
+  }
+
+  cartBtn.addEventListener('click', () => {
+    cartModal.style.display = 'flex';
+  });
+
+  function closeCart(){
+    cartModal.style.display = 'none';
+  }
+
+  window.addEventListener('click', e => {
+    if(e.target === cartModal) closeCart();
+  });
+</script>
+
+</body>
+</html>
