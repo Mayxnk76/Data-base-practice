@@ -1,7 +1,3 @@
--- EMP1 TABLE
--- This table stores basic employee information.
--- Important concepts: CREATE TABLE, column names, datatypes,
--- NUMBER, VARCHAR2, CHAR, DATE.
 CREATE TABLE emp1
 (
     Emp_ID       NUMBER(5) ,
