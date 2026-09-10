@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YumRush • Food Delivery</title>
+  <style>
+    :root{
+      --bg: #0b1020;
+      --card: #121933;
+      --muted: #96a0c0;
+      --text: #e9edff;  
+      --brand: #6c7bff;
+      --brand-2: #8ee7ff;
+      --accent: #ffb86c;
+      --danger: #ff6c6c;
+      --ok: #1ed760;
+      --shadow: 0 20px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial;
+      color:var(--text); background: radial-gradient(1200px 700px at 80% -10%, rgba(108,123,255,.25), transparent 40%),
+                          radial-gradient(900px 500px at -10% 20%, rgba(142,231,255,.25), transparent 45%),
+                          var(--bg);
+      line-height:1.5;
+    }
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+    .container{width:min(1200px, 92%); margin-inline:auto}
+
+    /* nav */
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(6px);
+      background:linear-gradient(to bottom, rgba(11,16,32,.85), rgba(11,16,32,.55));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .logo{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.5px}
+    .logo .mark{width:34px; height:34px; border-radius:10px; background:conic-gradient(from 200deg, var(--brand), var(--brand-2)); box-shadow:0 6px 18px rgba(140,160,255,.35)}
+    .nav a.link{opacity:.8; transition:.2s; font-weight:600}
+    .links{display:flex; gap:20px; align-items:center}
+    .nav a.link:hover{opacity:1}
+    .cart-btn{display:flex; align-items:center; gap:10px; padding:10px 12px; background:linear-gradient(135deg, rgba(108,123,255,.25), rgba(142,231,255,.2)); border:1px solid rgba(255,255,255,.12); border-radius:999px; cursor:pointer; box-shadow:var(--shadow)}
+    .cart-count{min-width:22px; height:22px; border-radius:999px; background:var(--accent); display:grid; place-items:center; font-size:12px; font-weight:800; color:#2b2230}
+
+    /* hero */
+    .hero{padding:70px 0 30px}
+    .hero-wrap{display:grid; grid-template-columns:1.1fr .9fr; gap:30px; align-items:center}
+    .title{font-size:clamp(32px, 6vw, 58px); line-height:1.05; margin:0}
+    .subtitle{opacity:.85; font-size:clamp(15px, 2.4vw, 18px)}
+    .cta{display:flex; gap:14px; margin-top:22px}
+    .btn{padding:12px 18px; border-radius:14px; font-weight:700; border:1px solid rgba(255,255,255,.12); cursor:pointer; transition:.2s; box-shadow:var(--shadow)}
+    .btn.primary{background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#0b1020}
+    .btn.ghost{background:rgba(255,255,255,.03)}
+    .btn:hover{transform:translateY(-2px)}
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:24px; padding:18px; position:relative}
+    .hero-img{height:380px; border-radius:16px; background:
+      radial-gradient(200px 200px at 75% 20%, rgba(255,184,108,.7),transparent 60%),
+      radial-gradient(300px 200px at 20% 70%, rgba(140,160,255,.6),transparent 60%),
+      linear-gradient(135deg,#1b2345,#101736);
+      display:grid; place-items:center; overflow:hidden; box-shadow:var(--shadow)
+    }
+    .hero-plate{width:80%; aspect-ratio:1/1; border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff, #e7eefb 40%, #b7c6f5);
+      position:relative}
+    .hero-plate:after{content:""; position:absolute; inset:12%; border-radius:50%; background:conic-gradient(from 0deg, #ffcf9d, #ffd2b5 20%, #ffd19f 40%, #ffc487 60%, #ffd7b5 80%, #ffcf9d); filter:blur(2px)}
+    .hero-badge{position:absolute; right:16px; bottom:-16px; background:#0b1020; border:1px solid rgba(255,255,255,.14); padding:10px 14px; border-radius:999px; display:flex; align-items:center; gap:8px; box-shadow:var(--shadow); font-weight:700}
+
+    /* controls */
+    .controls{display:grid; grid-template-columns: 1fr auto; gap:14px; margin:26px 0}
+    .search{display:flex; align-items:center; gap:10px; padding:12px 14px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:14px}
+    .search input{flex:1; background:transparent; border:0; outline:0; color:var(--text)}
+    .filter{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{padding:10px 14px; border-radius:999px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); cursor:pointer; font-weight:700; opacity:.9}
+    .chip.active{background:linear-gradient(135deg, rgba(108,123,255,.3), rgba(142,231,255,.25)); opacity:1}
+
+    /* grid */
+    .grid{display:grid; grid-template-columns: repeat(4, 1fr); gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:20px; overflow:hidden; display:flex; flex-direction:column; transition:.2s; opacity:0; transform:translateY(10px)
+    }
+    .card.show{opacity:1; transform:none}
+    .thumb{position:relative; aspect-ratio: 4/3; background:linear-gradient(135deg,#313b6e,#1a2247); display:grid; place-items:center}
+    .pill{position:absolute; top:10px; left:10px; padding:6px 10px; border-radius:999px; background:rgba(0,0,0,.45); font-size:12px; font-weight:800}
+    .content{padding:14px; display:flex; flex-direction:column; gap:10px}
+    .row{display:flex; justify-content:space-between; align-items:center; gap:10px}
+    .price{font-size:18px; font-weight:800; color:var(--accent)}
+    .add{padding:10px 12px; border-radius:12px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); cursor:pointer; font-weight:700}
+    .add:hover{transform:translateY(-2px)}
+    .stars{display:flex; gap:3px; opacity:.9}
+
+    /* offers */
+    .offers{margin:40px 0}
+    .offer-grid{display:grid; grid-template-columns:2fr 1fr 1fr; gap:18px}
+    .offer{padding:20px; border-radius:20px; background:linear-gradient(135deg, rgba(108,123,255,.22), rgba(142,231,255,.22)); border:1px solid rgba(255,255,255,.12)}
+    .offer.small{background:linear-gradient(135deg, rgba(255,184,108,.25), rgba(108,123,255,.18))}
+
+    /* testimonials */
+    .testimonials{margin:30px 0 60px}
+    .slider{position:relative; overflow:hidden; border-radius:20px; border:1px solid rgba(255,255,255,.08)}
+    .slides{display:flex; transition: transform .5s ease}
+    .slide{min-width:100%; padding:26px; background:rgba(255,255,255,.03)}
+
+    /* checkout */
+    .checkout{margin:60px 0}
+    form{display:grid; gap:12px}
+    .field{display:flex; flex-direction:column; gap:6px}
+    .field input, .field textarea, .field select{
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:12px; color:var(--text)
+    }
+    .inline{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+
+    /* cart drawer */
+    .drawer{position:fixed; inset:0; display:none}
+    .drawer.open{display:block}
+    .shade{position:absolute; inset:0; background:rgba(0,0,0,.5)}
+    .panel{position:absolute; right:0; top:0; bottom:0; width:min(420px, 95%); background:var(--card); border-left:1px solid rgba(255,255,255,.12); padding:18px; display:flex; flex-direction:column; gap:12px}
+    .cart-items{flex:1; overflow:auto; display:flex; flex-direction:column; gap:10px}
+    .cart-item{display:grid; grid-template-columns: 64px 1fr auto; gap:10px; align-items:center; padding:10px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:12px}
+    .qty{display:flex; gap:8px; align-items:center}
+    .qty button{width:28px; height:28px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.06); color:var(--text); font-weight:800; cursor:pointer}
+    .total{display:flex; justify-content:space-between; align-items:center; font-weight:800; padding-top:8px; border-top:1px dashed rgba(255,255,255,.12)}
+
+    /* footer */
+    footer{padding:30px 0; opacity:.8}
+
+    /* responsive */
+    @media (max-width: 980px){
+      .hero-wrap{grid-template-columns:1fr}
+      .offer-grid{grid-template-columns:1fr 1fr}
+      .grid{grid-template-columns: repeat(2, 1fr)}
+    }
+    @media (max-width: 560px){
+      .links{display:none}
+      .grid{grid-template-columns: 1fr}
+      .inline{grid-template-columns: 1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="logo" href="#home" aria-label="YumRush home">
+        <div class="mark" aria-hidden="true"></div>
+        <span>YumRush</span>
+      </a>
+      <nav class="links" aria-label="Primary">
+        <a class="link" href="#menu">Menu</a>
+        <a class="link" href="#offers">Offers</a>
+        <a class="link" href="#reviews">Reviews</a>
+        <a class="link" href="#checkout">Checkout</a>
+      </nav>
+      <button class="cart-btn" id="openCart" aria-label="Open cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span>Cart</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="home">
+    <!-- HERO -->
+    <section class="hero container">
+      <div class="hero-wrap">
+        <div>
+          <h1 class="title">Delicious food, delivered fast ⚡</h1>
+          <p class="subtitle">Search thousands of dishes from your favorite restaurants. Fresh, hot, and at your door in minutes.</p>
+          <div class="cta">
+            <a class="btn primary" href="#menu">Order Now</a>
+            <a class="btn ghost" href="#offers">See Offers</a>
+          </div>
+          <div class="controls">
+            <div class="search">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              <input id="searchInput" placeholder="Search for pizza, burger, sushi..." aria-label="Search menu" />
+            </div>
+            <div class="filter" id="categoryChips" role="tablist" aria-label="Filter by category">
+              <!-- Chips injected by JS -->
+            </div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-img">
+            <div class="hero-plate" aria-hidden="true"></div>
+            <div class="hero-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              30-min delivery • Live tracking
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section id="menu" class="container">
+      <h2 style="margin:6px 0 10px">Popular near you</h2>
+      <div class="grid" id="menuGrid" aria-live="polite"></div>
+    </section>
+
+    <!-- OFFERS -->
+    <section id="offers" class="offers container">
+      <h2 style="margin:0 0 12px">Special offers</h2>
+      <div class="offer-grid">
+        <div class="offer">
+          <h3>Flat 50% off • Weekend Feast</h3>
+          <p>Use code <b>FEAST50</b> on orders above ₹499. Valid Fri–Sun.</p>
+          <a href="#menu" class="btn" style="margin-top:10px">Apply & Shop</a>
+        </div>
+        <div class="offer small">
+          <h3>Free Delivery</h3>
+          <p>on your first 3 orders.</p>
+        </div>
+        <div class="offer small">
+          <h3>Combo Deals</h3>
+          <p>Meal + drink starting ₹199</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="reviews" class="testimonials container">
+      <h2 style="margin:0 0 12px">What customers say</h2>
+      <div class="slider" aria-roledescription="carousel" aria-label="Testimonials">
+        <div class="slides" id="slides">
+          <div class="slide">
+            <p style="font-size:18px">“Super fast and piping hot. The paneer tikka pizza is a must!”</p>
+            <div class="stars" aria-label="5 star rating">★★★★★</div>
+            <small>— Riya S.</small>
+          </div>
+          <div class="slide">
+            <p style="font-size:18px">“Clean UI, easy checkout. My go-to for late-night cravings.”</p>
+            <div class="stars" aria-label="5 star rating">★★★★★</div>
+            <small>— Aarav K.</small>
+          </div>
+          <div class="slide">
+            <p style="font-size:18px">“Live tracking is accurate and the deals are 🔥.”</p>
+            <div class="stars" aria-label="5 star rating">★★★★★</div>
+            <small>— Meera P.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHECKOUT -->
+    <section id="checkout" class="checkout container">
+      <h2 style="margin:0 0 12px">Checkout</h2>
+      <form id="checkoutForm" novalidate>
+        <div class="inline">
+          <div class="field"><label for="name">Full Name</label><input id="name" required placeholder="e.g., Rahul Sharma" /></div>
+          <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" required pattern="[0-9]{10}" placeholder="10-digit number" /></div>
+        </div>
+        <div class="field"><label for="address">Delivery Address</label><textarea id="address" rows="3" required placeholder="Flat, Street, City, Pincode"></textarea></div>
+        <div class="inline">
+          <div class="field"><label for="city">City</label><input id="city" required value="Your City" /></div>
+          <div class="field"><label for="pincode">Pincode</label><input id="pincode" required pattern="[0-9]{6}" placeholder="6-digit" /></div>
+        </div>
+        <div class="field">
+          <label>Payment</label>
+          <div style="display:flex; gap:12px; flex-wrap:wrap">
+            <label><input type="radio" name="pay" value="COD" checked /> Cash on Delivery</label>
+            <label><input type="radio" name="pay" value="UPI" /> UPI</label>
+            <label><input type="radio" name="pay" value="Card" /> Card</label>
+          </div>
+        </div>
+        <button class="btn primary" type="submit">Place Order</button>
+        <small id="formMsg" aria-live="polite"></small>
+      </form>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div class="row">
+      <span>© <span id="year"></span> YumRush</span>
+      <span>Built with ♥ using HTML • CSS • JS</span>
+    </div>
+  </footer>
+
+  <!-- CART DRAWER -->
+  <div class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="Shopping cart">
+    <div class="shade" id="closeCart"></div>
+    <aside class="panel">
+      <div class="row">
+        <h3 style="margin:0">Your Cart</h3>
+        <button class="btn" id="clearCart" title="Clear cart">Clear</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="total"><span>Total</span><span id="cartTotal">₹0</span></div>
+      <a class="btn primary" href="#checkout" id="goCheckout">Go to Checkout</a>
+    </aside>
+  </div>
+
+  <template id="cardTpl">
+    <article class="card reveal">
+      <div class="thumb">
+        <span class="pill">New</span>
+        <!-- Decorative dish icon -->
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4"/><path d="M7 21h10a5 5 0 0 0 5-5H2a5 5 0 0 0 5 5Z"/><path d="M16 7a4 4 0 0 1 4 4H4a4 4 0 0 1 4-4"/></svg>
+      </div>
+      <div class="content">
+        <div class="row"><h3 class="name" style="margin:0"></h3><span class="price"></span></div>
+        <div class="row"><small class="desc" style="opacity:.85"></small><div class="stars" aria-label="rating">★★★★★</div></div>
+        <div class="row"><small class="cat" style="opacity:.7"></small><button class="add">Add to Cart</button></div>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    // --------- Data ---------
+    const CATEGORIES = ["All", "Pizza", "Burger", "Indian", "Asian", "Dessert", "Drinks"];
+    const MENU = [
+      {id:1, name:"Paneer Tikka Pizza", cat:"Pizza", price:299, desc:"12" + "\u2033" + " hand-tossed • spicy", rating:4.8},
+      {id:2, name:"Classic Margherita", cat:"Pizza", price:249, desc:"Fresh basil • extra cheese", rating:4.7},
+      {id:3, name:"Smoky Chicken Burger", cat:"Burger", price:219, desc:"Grilled patty • house sauce", rating:4.6},
+      {id:4, name:"Veggie Supreme Burger", cat:"Burger", price:189, desc:"Crispy veg patty • lettuce", rating:4.5},
+      {id:5, name:"Butter Chicken", cat:"Indian", price:329, desc:"Creamy tomato gravy", rating:4.9},
+      {id:6, name:"Dal Makhani", cat:"Indian", price:219, desc:"Slow-cooked black lentils", rating:4.7},
+      {id:7, name:"Veg Hakka Noodles", cat:"Asian", price:179, desc:"Wok-tossed • veggies", rating:4.4},
+      {id:8, name:"Chicken Fried Rice", cat:"Asian", price:199, desc:"Egg • spring onion", rating:4.5},
+      {id:9, name:"Gulab Jamun (2 pc)", cat:"Dessert", price:89, desc:"Warm • syrupy", rating:4.8},
+      {id:10, name:"Chocolate Brownie", cat:"Dessert", price:149, desc:"Fudgy • nuts", rating:4.6},
+      {id:11, name:"Masala Lemonade", cat:"Drinks", price:79, desc:"Zesty • refreshing", rating:4.3},
+      {id:12, name:"Iced Latte", cat:"Drinks", price:149, desc:"Bold • chilled", rating:4.4}
+    ];
+
+    const state = { search:"", cat:"All", cart: JSON.parse(localStorage.getItem('cart')||'{}') };
+
+    // --------- Utilities ---------
+    const formatINR = v => `₹${v.toLocaleString('en-IN')}`;
+    const saveCart = () => localStorage.setItem('cart', JSON.stringify(state.cart));
+    const cartCount = () => Object.values(state.cart).reduce((a,b)=>a+b.qty,0);
+    const cartTotal = () => Object.values(state.cart).reduce((a,b)=>a+b.qty*b.price,0);
+
+    // --------- Render Chips ---------
+    const chipWrap = document.getElementById('categoryChips');
+    CATEGORIES.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'chip' + (c==='All'?' active':'');
+      b.role = 'tab';
+      b.textContent = c;
+      b.addEventListener('click', ()=>{
+        document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        state.cat = c; renderMenu();
+      });
+      chipWrap.appendChild(b);
+    });
+
+    // --------- Render Menu ---------
+    const grid = document.getElementById('menuGrid');
+    const tpl = document.getElementById('cardTpl');
+
+    function renderMenu(){
+      grid.innerHTML = '';
+      const q = state.search.trim().toLowerCase();
+      const items = MENU.filter(m => (state.cat==='All' || m.cat===state.cat) && m.name.toLowerCase().includes(q));
+      items.forEach((m,i)=>{
+        const node = tpl.content.cloneNode(true);
+        node.querySelector('.name').textContent = m.name;
+        node.querySelector('.desc').textContent = m.desc;
+        node.querySelector('.cat').textContent = m.cat;
+        node.querySelector('.price').textContent = formatINR(m.price);
+        node.querySelector('.stars').setAttribute('aria-label', `${m.rating} star rating`);
+        const add = node.querySelector('.add');
+        add.addEventListener('click', ()=> addToCart(m));
+        const art = node.querySelector('.card');
+        setTimeout(()=> art.classList.add('show'), 30*(i+1));
+        grid.appendChild(node);
+      });
+      if(items.length===0){
+        grid.innerHTML = `<div style="opacity:.8">No items match your search.</div>`;
+      }
+    }
+
+    // --------- Search ---------
+    document.getElementById('searchInput').addEventListener('input', (e)=>{
+      state.search = e.target.value; renderMenu();
+    });
+
+    // --------- Cart Logic ---------
+    const drawer = document.getElementById('drawer');
+    const openCart = document.getElementById('openCart');
+    const closeCart = document.getElementById('closeCart');
+    const cartItems = document.getElementById('cartItems');
+    const cartCountEl = document.getElementById('cartCount');
+    const cartTotalEl = document.getElementById('cartTotal');
+
+    function addToCart(item){
+      if(!state.cart[item.id]) state.cart[item.id] = {...item, qty:0};
+      state.cart[item.id].qty++;
+      saveCart();
+      renderCart();
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden','false');
+    }
+
+    function changeQty(id, delta){
+      const it = state.cart[id];
+      if(!it) return;
+      it.qty += delta;
+      if(it.qty<=0) delete state.cart[id];
+      saveCart();
+      renderCart();
+    }
+
+    function renderCart(){
+      cartItems.innerHTML = '';
+      const items = Object.values(state.cart);
+      if(items.length===0){
+        cartItems.innerHTML = '<div style="opacity:.8">Your cart is empty.</div>';
+      } else {
+        items.forEach(it=>{
+          const row = document.createElement('div');
+          row.className = 'cart-item';
+          row.innerHTML = `
+            <div class="thumb" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4"/><path d="M7 21h10a5 5 0 0 0 5-5H2a5 5 0 0 0 5 5Z"/><path d="M16 7a4 4 0 0 1 4 4H4a4 4 0 0 1 4-4"/></svg></div>
+            <div>
+              <div style="font-weight:700">${it.name}</div>
+              <small style="opacity:.8">${it.cat} • ${formatINR(it.price)}</small>
+            </div>
+            <div class="qty">
+              <button aria-label="Decrease" onclick="changeQty(${it.id}, -1)">−</button>
+              <span>${it.qty}</span>
+              <button aria-label="Increase" onclick="changeQty(${it.id}, 1)">+</button>
+            </div>
+          `;
+          cartItems.appendChild(row);
+        });
+      }
+      cartCountEl.textContent = cartCount();
+      cartTotalEl.textContent = formatINR(cartTotal());
+    }
+
+    openCart.addEventListener('click', ()=>{ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false') });
+    document.getElementById('closeCart').addEventListener('click', ()=>{ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true') });
+    document.getElementById('clearCart').addEventListener('click', ()=>{ state.cart={}; saveCart(); renderCart(); });
+    document.getElementById('goCheckout').addEventListener('click', ()=>{ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true') });
+
+    // expose for inline onclick
+    window.changeQty = changeQty;
+
+    // --------- Testimonials slider ---------
+    const slides = document.getElementById('slides');
+    let idx = 0; setInterval(()=>{ idx=(idx+1)%3; slides.style.transform = `translateX(-${idx*100}%)`; }, 3500);
+
+    // --------- Checkout ---------
+    document.getElementById('checkoutForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const pin = document.getElementById('pincode').value.trim();
+      const pay = document.querySelector('input[name="pay"]:checked')?.value || 'COD';
+
+      if(!name || !/^[0-9]{10}$/.test(phone) || !address || !city || !/^[0-9]{6}$/.test(pin)){
+        document.getElementById('formMsg').textContent = 'Please fill valid details (phone: 10 digits, pincode: 6 digits).';
+        document.getElementById('formMsg').style.color = 'var(--danger)';
+        return;
+      }
+
+      const order = Object.values(state.cart);
+      if(order.length===0){
+        document.getElementById('formMsg').textContent = 'Your cart is empty.';
+        document.getElementById('formMsg').style.color = 'var(--danger)';
+        return;
+      }
+
+      const total = cartTotal();
+      const summary = order.map(o=>`• ${o.qty} × ${o.name} (${formatINR(o.price)})`).join('\n');
+      alert(`✅ Order placed!\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}, ${city} - ${pin}\nPayment: ${pay}\n\nItems:\n${summary}\n\nTotal: ${formatINR(total)}\n\nThank you for ordering with YumRush!`);
+      // reset
+      state.cart = {}; saveCart(); renderCart(); e.target.reset();
+      document.getElementById('formMsg').textContent = 'Order placed successfully!';
+      document.getElementById('formMsg').style.color = 'var(--ok)';
+    });
+
+    // --------- On load ---------
+    document.getElementById('year').textContent = new Date().getFullYear();
+    renderMenu();
+    renderCart();
+  </script>
+</body>
+</html>
